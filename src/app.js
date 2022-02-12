@@ -6,7 +6,7 @@ import Error404 from './views/pages/Error404.js'
 import PostShow from './views/pages/PostShow'
 import Register from './views/pages/Register.js'
 
-import NavBar from './views/components/Navbar.js'
+import Navbar from './views/components/Navbar.js'
 import Bottombar from './views/components/Bottombar.js'
 
 import Utils from './services/Utils.js'

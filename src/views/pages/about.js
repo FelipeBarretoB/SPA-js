@@ -1,21 +1,16 @@
 //templating pain
 
-let About ={
-    render : async () =>{
-        let view = `
-            <section class= "Section>
+let About = {
+    render : async () => {
+        let view =  /*html*/`
+            <section class="section">
                 <h1> About </h1>
             </section>
         `
         return view
     },
-    after_render: async() =>{
-        document.getElementById("myBtn").addEventListener("Click", () => {
-            console.log('Yo')
-            alert(Yo)
-        })
-
-    }
+    after_render: async () => {}
+        
 }
 
 export default About;
