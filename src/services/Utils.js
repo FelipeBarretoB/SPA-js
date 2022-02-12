@@ -15,7 +15,7 @@ const Utils = {
 
         request.resourse =r[1]
         request.id =r[2]
-        request.ver =r[3]
+        request.verb =r[3]
 
         return request
     }
