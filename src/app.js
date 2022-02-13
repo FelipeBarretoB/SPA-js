@@ -72,7 +72,7 @@ let Navbar = {
                                     <a class="button is-primary" href="#/register">
                                         <strong>Sign up</strong>
                                     </a>
-                                    <a class="button is-light">
+                                    <a class="button is-light" href="#/login">
                                         Log in
                                     </a>
                                 </div>
@@ -88,6 +88,60 @@ let Navbar = {
 
 }
 
+let LogIn={
+    render : async () => {
+        let view =  /*html*/`
+        <section class="section">
+        <div class="field">
+            <p class="control has-icons-left has-icons-right">
+                <input class="input" id="email_input" type="email" placeholder="Enter your Email">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                    <i class="fas fa-check"></i>
+                </span>
+            </p>
+        </div>
+        <div class="field">
+            <p class="control has-icons-left">
+                <input class="input" id="pass_input" type="password" placeholder="Enter a Password">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                </span>
+            </p>
+        </div>
+        <div class="field">
+            <p class="control">
+                <button class="button is-primary" id="login_submit_btn">
+                    log in
+                </button>
+             </p>
+        </div>
+        </section>
+        
+        `
+        return view
+    },
+    after_render: async () => {
+        document.getElementById("login_submit_btn").addEventListener ("click",  () => {
+            let email       = document.getElementById("email_input");
+            let pass        = document.getElementById("pass_input");
+            if (email.value =='' | pass.value == '' ) {
+                alert (`The fields cannot be empty`)
+            } 
+            else {
+                alert(`logged in`)
+                location.href='#/'
+                logged=true;
+            }    
+        })
+        
+    }
+        
+}
+
+
 let About = {
     render : async () => {
         let view =  /*html*/`
@@ -99,6 +153,82 @@ let About = {
     },
     after_render: async () => {}
         
+}
+
+let logged=false;
+
+let Modify ={
+    render : async () => {
+        let view =  /*html*/`
+        <section class="section">
+        <div class="field">
+            <p class="control has-icons-left has-icons-right">
+                <input class="input" id="PostId" Type="text">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                    <i class="fas fa-check"></i>
+                </span>
+            </p>
+        </div>
+        <div class="field">
+            <p class="control has-icons-left">
+                <input class="input" id="PostTitle" Type="text" >
+                <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                </span>
+            </p>
+        </div>
+        <div class="field">
+            <p class="control has-icons-left">
+                <input class="input" id="PostContent" Type="text" >
+                <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                </span>
+            </p>
+        </div>
+        <div class="field">
+            <p class="control has-icons-left">
+                <input class="input" id="PostAuthor"  Type="text">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                </span>
+            </p>
+        </div>
+        <div class="field">
+            <p class="control">
+                <button class="button is-primary" id="modify">
+                update
+                </button>
+            </p>
+        </div>
+    </section>
+`
+        return view
+    },
+    after_render: async () => {
+        let id       = document.getElementById("PostId");
+        let title        = document.getElementById("PostTitle");
+        let content  = document.getElementById("PostContent");
+        let author  = document.getElementById("PostAuthor");
+        id.value=postData["Id"]
+        title.value=postData["Title"]
+        content.value=postData["Content"]
+        author.value=postData["Author"]
+        document.getElementById("modify").addEventListener ("click",  () => {
+            
+            if (id.value =='' | title.value == '' | content.value == '' | author.value=='') {
+                alert (`The fields cannot be empty`)
+            } 
+            else {
+                alert(`updated`)
+                location.href='#/'
+            }    
+        })
+
+
+    }
 }
 
 let Error404 = {
@@ -170,22 +300,50 @@ let getPost = async (id) => {
    }
 }
 
+let postData ={
+    "Id": "",
+    "Title": "",
+    "Content": "",
+    "Author": "",
+
+}
+
+let currentPost=null;
+
 let PostShow = {
 
     render : async () => {
         let request = Utils.parseRequestURL()
         let post = await getPost(request.id)
-        
+        currentPost=post
+
         return /*html*/`
             <section class="section">
                 <h1> Post Id : ${post.id}</h1>
                 <p> Post Title : ${post.title} </p>
                 <p> Post Content : ${post.content} </p>
                 <p> Post Author : ${post.name} </p>
+                <p class="control">
+                <a class="button is-light" id="veriModify">
+                    modify
+                </a>
+                </p>
             </section>
         `
     }
     , after_render: async () => {
+        document.getElementById("veriModify").addEventListener("click", ()=>{
+
+            if(logged){
+                postData["Id"]=currentPost.id
+                postData["Title"]=currentPost.title
+                postData["Content"]=currentPost.content
+                postData["Author"]=currentPost.name
+                location.href="#/modify"
+            }else{
+                alert(`must be logged in`)
+            }
+        })
     }
 }
 
@@ -254,6 +412,8 @@ const routes = {
     , '/about'      : About
     , '/p/:id'      : PostShow
     , '/register'   : Register
+    , '/login'      : LogIn
+    , '/modify'     : Modify
 };
 
 
@@ -272,7 +432,7 @@ const router = async () => {
     await Bottombar.after_render();
 
 
-    console.log("a");
+   
     let request = Utils.parseRequestURL()
 
 
