@@ -1,19 +1,91 @@
-"use strict";
+const Utils = { 
 
-//El rauting papaaaaaaaa
+    parseRequestURL : () => {
 
-let Error404 = {
+        let url = location.hash.slice(1).toLowerCase() || '/';
+        let r = url.split("/")
+        let request = {
+            resource    : null,
+            id          : null,
+            verb        : null
+        }
+        request.resource    = r[1]
+        request.id          = r[2]
+        request.verb        = r[3]
 
-    render : async () => {
+        return request
+    }
+
+
+    , sleep: (ms) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+let Bottombar = {
+    render: async () => {
         let view =  /*html*/`
-            <section class="section">
-                <h1> 404 Error </h1>
-            </section>
+        <footer class="footer">
+            <div class="content has-text-centered">
+                <p>
+                    This is my foot. There are many like it, but this one is mine.
+                </p>
+            </div>
+        </footer>
         `
         return view
-    }
-    , after_render: async () => {
-    }
+    },
+    after_render: async () => { }
+
+}
+
+let Navbar = {
+    render: async () => {
+        let view =  /*html*/`
+             <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="container">
+                    <div class="navbar-brand">
+                        <a class="navbar-item" href="#/">
+                            <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+                        </a>
+                        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <div id="navbarBasicExample" class="navbar-menu is-active" aria-expanded="false">
+                        <div class="navbar-start">
+                            <a class="navbar-item" href="#/">
+                                Home
+                            </a>
+                            <a class="navbar-item" href="#/about">
+                                About
+                            </a>
+                            <a class="navbar-item" href="#/secret">
+                                Secret
+                            </a>
+                        </div>
+                        <div class="navbar-end">
+                            <div class="navbar-item">
+                                <div class="buttons">
+                                    <a class="button is-primary" href="#/register">
+                                        <strong>Sign up</strong>
+                                    </a>
+                                    <a class="button is-light">
+                                        Log in
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        `
+        return view
+    },
+    after_render: async () => { }
+
 }
 
 let About = {
@@ -27,6 +99,20 @@ let About = {
     },
     after_render: async () => {}
         
+}
+
+let Error404 = {
+
+    render : async () => {
+        let view =  /*html*/`
+            <section class="section">
+                <h1> 404 Error </h1>
+            </section>
+        `
+        return view
+    }
+    , after_render: async () => {
+    }
 }
 
 let getPostsList = async () => {
@@ -64,6 +150,7 @@ let Home = {
    }
    , after_render: async () => {
    }
+
 }
 
 let getPost = async (id) => {
@@ -81,7 +168,7 @@ let getPost = async (id) => {
    } catch (err) {
        console.log('Error getting documents', err)
    }
-};
+}
 
 let PostShow = {
 
@@ -100,7 +187,7 @@ let PostShow = {
     }
     , after_render: async () => {
     }
-};
+}
 
 let Register = {
 
@@ -144,6 +231,7 @@ let Register = {
             </section>
         `
     }
+
     , after_render: async () => {
         document.getElementById("register_submit_btn").addEventListener ("click",  () => {
             let email       = document.getElementById("email_input");
@@ -159,134 +247,46 @@ let Register = {
             }    
         })
     }
-};
+}
 
-
-let Navbar = {
-    render: async () => {
-        let view =  `
-             <nav class="navbar" role="navigation" aria-label="main navigation">
-                <div class="container">
-                    <div class="navbar-brand">
-                        <a class="navbar-item" href="/#/">
-                            <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-                        </a>
-                        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                        </a>
-                    </div>
-                    <div id="navbarBasicExample" class="navbar-menu is-active" aria-expanded="false">
-                        <div class="navbar-start">
-                            <a class="navbar-item" href="/#/">
-                                Home
-                            </a>
-                            <a class="navbar-item" href="/#/about">
-                                About
-                            </a>
-                            <a class="navbar-item" href="/#/secret">
-                                Secret
-                            </a>
-                        </div>
-                        <div class="navbar-end">
-                            <div class="navbar-item">
-                                <div class="buttons">
-                                    <a class="button is-primary" href="/#/register">
-                                        <strong>Sign up</strong>
-                                    </a>
-                                    <a class="button is-light">
-                                        Log in
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        `
-        return view
-    },
-    after_render: async () => { }
-
-};
-
-
-let Bottombar = {
-    render: async () => {
-        let view = `
-        <footer class="footer">
-            <div class="content has-text-centered">
-                <p>
-                    This is my foot. There are many like it, but this one is mine.
-                </p>
-            </div>
-        </footer>
-        `
-        return view
-    },
-    after_render: async () => { }
-
-};
-
-const Utils = {
-
-    parseRequestURL : () =>{
-        
-        let url = location.hash.slice(1).toLocaleLowerCase || '/';
-        let r =url.split("/")
-        let request = {
-
-            resourse : null,
-            id : null,
-            verb : null
-        }
-
-        request.resourse =r[1]
-        request.id =r[2]
-        request.verb =r[3]
-
-        return request
-    }
-    , sleep: (ms) => {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
+const routes = {
+    '/'             : Home
+    , '/about'      : About
+    , '/p/:id'      : PostShow
+    , '/register'   : Register
 };
 
 
 
-const routes={
+const router = async () => {
 
-    '/' : Home 
-    , '/about'  :About 
-    , '/p/:id'  :PostShow
-    , '/register'   :Register
 
-};
-
-const router =async () =>{
-
-    
     const header = null || document.getElementById('header_container');
     const content = null || document.getElementById('page_container');
     const footer = null || document.getElementById('footer_container');
+    
 
     header.innerHTML = await Navbar.render();
     await Navbar.after_render();
     footer.innerHTML = await Bottombar.render();
     await Bottombar.after_render();
 
+
+    console.log("a");
     let request = Utils.parseRequestURL()
 
-    let parsedURL = (request.resourse ? '/' + request.resourse : '/')+(request.id ? '/:id' : '')+(request.verb ? '/' +request.verb : '')
 
-    let page = routes[parsedURL] ? routes[parsedURL]: Error404
+    let parsedURL = (request.resource ? '/' + request.resource : '/') + (request.id ? '/:id' : '') + (request.verb ? '/' + request.verb : '')
+    
 
+    let page = routes[parsedURL] ? routes[parsedURL] : Error404
     content.innerHTML = await page.render();
-
     await page.after_render();
+  
 }
-window.addEventListener('load', router);
-window.addEventListener('hashchange',router);
 
+
+window.addEventListener('hashchange', router);
+
+
+window.addEventListener('load', router);
